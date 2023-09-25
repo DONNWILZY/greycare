@@ -24,6 +24,12 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+      },
     phoneNumber: {
       type: String,
       unique: true,
@@ -44,11 +50,15 @@ const UserSchema = new mongoose.Schema(
       enum: ["isActive", "isInactive", "isDeactivated", "isSuspended", "isLimited"],
       default: "isActive",
     },
-    apllyDoctor: {
-      type: String,
-      enum: ["pending", "reviewing", "approved", "declined"],
-      default: "pending",
-    },
+
+    applyDoctor: {
+        credentials: doctorCredentialSchema, // Embed the doctor's credentials
+        status: {
+          type: String,
+          enum: ["pending", "reviewing", "approved", "declined"],
+          default: "pending",
+        },
+      },
     
     doctorInfo: {
       type: mongoose.Schema.Types.ObjectId,
@@ -147,7 +157,30 @@ const emergencyContactSchema = new mongoose.Schema({
     },
   });
 
-  
+  const doctorCredentialSchema = new mongoose.Schema({
+    // Degree information
+    degree: {
+      type: String,
+      required: true,
+    },
+    // CV (Curriculum Vitae)
+    cv: {
+      type: String,
+      required: true,
+    },
+    // Cover Letter
+    coverLetter: {
+      type: String,
+      required: true,
+    },
+    // Photograph or License (you can specify which one)
+    licenseOrPhotograph: {
+      type: String,
+      required: true,
+    },
+  });
+
+
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
